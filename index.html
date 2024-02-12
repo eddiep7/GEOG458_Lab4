@@ -93,6 +93,15 @@
                 'attribution': 'Map tiles designed by Edward Park</a>'
             });
 
+            map.addSource('transit-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/transit_stops/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Edward Park</a>'
+            });
+
             map.addLayer({
                 'id': 'seahawks',
                 'type': 'raster',
@@ -102,15 +111,23 @@
                 'source': 'seahawks-tiles'
             });
 
-
+            map.addLayer({
+                'id': 'transit',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'transit-tiles'
+            });
+            
             // After the last frame rendered before the map enters an "idle" state.
             map.on('idle', () => {
-                if (!map.getLayer('seahawks')) {
+                if (!map.getLayer('seahawks') || !map.getLayer('transit')) {
                     return;
                 }
 
                 // Enumerate ids of the layers.
-                const toggleableLayerIds = ['seahawks'];
+                const toggleableLayerIds = ['seahawks', 'transit'];
 
                 // Set up the corresponding toggle button for each layer.
                 for (const id of toggleableLayerIds) {
